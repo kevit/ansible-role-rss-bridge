@@ -1,0 +1,25 @@
+server {
+        listen 80 default;
+        listen [::]:80 default;
+        root {{ rssb_path }};
+        index index.php;
+        server_name {{ rssb_domain }};
+ 
+        location / {
+            try_files $uri $uri/ =404;
+        }
+
+        location ~ /\. {  
+                deny all;  
+        }
+ 
+        location ~ \.php$ {
+            include snippets/fastcgi-php.conf;
+            fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+        }
+
+        add_header Content-Security-Policy "default-src 'self';";
+        add_header X-Frame-Options "DENY";
+        add_header X-Content-Type-Options "nosniff";
+        add_header X-XSS-Protection "1; mode=block";
+}

@@ -1,0 +1,17 @@
+---
+# defaults file for rss-bridge
+rssb_requirements:
+  - nginx
+  - php-fpm
+  - php-xml
+  - php-mbstring
+  - php-curl
+  - php-json
+rssb_path: /var/www/rssb/
+rssb_domain: rssb.example.com
+rssb_bridges: []
+rssb_http_proxy: ""
+rssb_auth: "false"
+rssb_username: ""
+rssb_password: ""
+rssb_email: ""

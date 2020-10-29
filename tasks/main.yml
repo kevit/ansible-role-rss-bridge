@@ -1,0 +1,10 @@
+---
+# tasks file for rss-bridge
+- include_tasks: prepare.yml
+  tags: prepare
+
+- include_tasks: nginx.yml
+  tags: nginx
+
+- include_tasks: rss-bridge.yml
+  tags: rss-bridge

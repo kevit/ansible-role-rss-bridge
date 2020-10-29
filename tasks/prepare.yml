@@ -1,0 +1,8 @@
+---
+# tasks file for rss-bridge
+- name: prepare | install rss-bridge requirements
+  apt:
+    name: "{{ rssb_requirements }}"
+    state: present
+  tags:
+    - rss-bridge-requirements

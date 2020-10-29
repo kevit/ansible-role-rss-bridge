@@ -1,0 +1,31 @@
+---
+# tasks file for rss-bridge
+- name: nginx | configure nginx
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: 0640
+  notify: restart nginx
+  tags:
+    - nginx-config
+
+- name: nginx | configure vhost
+  template:
+    src: nginx_vhost.conf.j2
+    dest: /etc/nginx/sites-available/rssb
+    owner: root
+    group: root
+    mode: 0640
+  tags:
+    - nginx-vhost-create
+
+- name: nginx | enable vhost
+  file:
+    src: /etc/nginx/sites-available/rssb
+    dest: /etc/nginx/sites-enabled/rssb
+    state: link
+  notify: restart nginx
+  tags:
+    - nginx-vhost-enable

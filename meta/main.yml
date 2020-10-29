@@ -1,0 +1,11 @@
+galaxy_info:
+  author: Mablr
+  description: rss-bridge role
+  license: GPL-3.0-only
+  min_ansible_version: 2.8
+  platforms:
+  - name: Debian
+    versions:
+    - buster
+  galaxy_tags: [rss, bridge, nginx, php]
+  

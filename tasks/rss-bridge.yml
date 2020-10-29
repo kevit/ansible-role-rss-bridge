@@ -1,0 +1,53 @@
+---
+# tasks file for rss-bridge
+- name: rss-bridge | get latest tag
+  # cf https://gist.github.com/lukechilds/a83e1d7127b78fef38c2914c4ececc3c
+  shell: |
+    /usr/bin/curl --silent 'https://api.github.com/repos/RSS-Bridge/rss-bridge/releases/latest' |\
+    /bin/grep 'tag_name' |\
+    /bin/sed -E 's/.*\"([^\"]+)\".*/\1/'
+  args:
+    executable: /bin/bash
+  register: rssb_latest_version
+  tags:
+    - rss-bridge-version
+
+- name: rss-bridge | clone git repo
+  git:
+    repo: "https://github.com/RSS-Bridge/rss-bridge"
+    dest: "{{ rssb_path }}"
+    force: yes
+    version: "{{ rssb_latest_version.stdout }}"
+  tags:
+    - rss-bridge-clone
+
+- name: rss-bridge | update rss-bridge config
+  template:
+    src: config.ini.php.j2
+    dest: "{{ rssb_path }}config.ini.php"
+    owner: www-data
+    group: www-data
+    mode: 0640
+  tags:
+    - rss-bridge-config
+
+- name: rss-bridge | update bridge whitelist
+  template:
+    src: whitelist.txt.j2
+    dest: "{{ rssb_path }}whitelist.txt"
+    owner: www-data
+    group: www-data
+    mode: 0640
+  tags:
+    - rss-bridge-whitelist
+
+- name: rss-bridge | adjust webdir ownership
+  file:
+    path: "{{ rssb_path }}"
+    state: directory
+    recurse: yes
+    owner: www-data
+    group: www-data
+  tags:
+    - rss-bridge-ownership
+
